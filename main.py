@@ -25,7 +25,7 @@ async def predict(file: UploadFile = File(...)):
   # Check if the uploaded file is an image
   if file.content_type not in ["image/jpeg", "image/png"]:
     raise HTTPException(status_code=400, detail="File format not supported")
- 
+
   try:
     # Read and process the image
     img = Image.open(io.BytesIO(await file.read()))
@@ -34,7 +34,7 @@ async def predict(file: UploadFile = File(...)):
     # Make prediction
     prediction = model.predict(preprocessed_img)
     predicted_class = output_class[np.argmax(prediction)]
-    predicted_accuracy = round(np.max(prediction) * 100, 2)
+    predicted_accuracy = float(round(np.max(prediction) * 100, 2))  # Convert to float
 
     return {
       "predicted_class": predicted_class,
@@ -42,6 +42,7 @@ async def predict(file: UploadFile = File(...)):
     }
   except Exception as e:
     raise HTTPException(status_code=500, detail=str(e))
+
 
 
 @app.post('/test')
