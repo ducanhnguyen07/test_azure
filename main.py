@@ -25,7 +25,7 @@ async def predict(file: UploadFile = File(...)):
   # Check if the uploaded file is an image
   if file.content_type not in ["image/jpeg", "image/png"]:
     raise HTTPException(status_code=400, detail="File format not supported")
-
+ 
   try:
     # Read and process the image
     img = Image.open(io.BytesIO(await file.read()))
